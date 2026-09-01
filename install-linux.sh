@@ -2,23 +2,22 @@
 
 set -e
 
-# Check if Go is installed
-if ! command -v go &> /dev/null; then
-    echo "Error: Go is not installed. Please install Go first."
-    echo "Visit https://golang.org/dl/ for installation instructions."
+# Check if Rust/Cargo is installed
+if ! command -v cargo &> /dev/null; then
+    echo "Error: cargo is not installed. Please install Rust first."
+    echo "Visit https://rustup.rs for installation instructions."
     exit 1
 fi
 
-echo "Building sleep-on-time..."
-go build -o sleep-on-time .
+echo "Building sleep-on-time (release)..."
+cargo build --release
 
 echo "Installing binary to /usr/local/bin..."
-sudo cp sleep-on-time /usr/local/bin/sleep-on-time
-sudo chmod +x /usr/local/bin/sleep-on-time
+sudo install -Dm755 target/release/sleep-on-time /usr/local/bin/sleep-on-time
 
 echo "Installing desktop file..."
 if [ -f "sleep-on-time.desktop" ]; then
-    sudo cp sleep-on-time.desktop /usr/share/applications/
+    sudo install -Dm644 sleep-on-time.desktop /usr/share/applications/sleep-on-time.desktop
     echo "Desktop file installed to /usr/share/applications/"
 else
     echo "Warning: sleep-on-time.desktop not found, skipping desktop file installation."
@@ -26,15 +25,9 @@ fi
 
 echo "Installing icon..."
 if [ -f "assets/icon-light.svg" ]; then
-    # Install to multiple locations for compatibility
-    sudo mkdir -p /usr/share/pixmaps
-    sudo cp assets/icon-light.svg /usr/share/pixmaps/sleep-on-time-icon.svg
-    echo "Icon installed to /usr/share/pixmaps/sleep-on-time-icon.svg"
-
-    # Also install to hicolor theme for better integration
-    sudo mkdir -p /usr/share/icons/hicolor/scalable/apps
-    sudo cp assets/icon-light.svg /usr/share/icons/hicolor/scalable/apps/sleep-on-time-icon.svg
-    echo "Icon installed to /usr/share/icons/hicolor/scalable/apps/sleep-on-time-icon.svg"
+    sudo install -Dm644 assets/icon-light.svg /usr/share/pixmaps/sleepontime.svg
+    sudo install -Dm644 assets/icon-light.svg /usr/share/icons/hicolor/scalable/apps/sleepontime.svg
+    echo "Icon installed to /usr/share/pixmaps/ and hicolor theme"
 
     # Update icon cache for KDE
     if command -v kbuildsycoca6 &> /dev/null; then
