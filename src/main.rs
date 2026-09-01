@@ -91,6 +91,7 @@ fn acquire_single_instance() -> InstanceGuard {
         .read(true)
         .write(true)
         .create(true)
+        .truncate(false)
         .open(&path)
     {
         Ok(f) => f,
