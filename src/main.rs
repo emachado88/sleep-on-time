@@ -158,8 +158,11 @@ fn tick_loop() {
             (due, app.countdown.is_some())
         };
         // Refresh the tray (tooltip + menu's Remaining entry) every second,
-        // but only while a countdown is running — the layout is static in idle.
-        if active && let Some(handle) = HANDLE.get() {
+        // while a countdown is running or just ended — the layout is static
+        // in idle.
+        if (due || active)
+            && let Some(handle) = HANDLE.get()
+        {
             handle.update(|_| {});
         }
         if due {
