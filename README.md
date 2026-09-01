@@ -29,11 +29,21 @@ cargo build --release
 
 ### Install (Linux)
 
+**From a release package** (prebuilt binary, no Rust toolchain required):
+
 ```bash
+tar -xzf sleep-on-time-v0.2.2-x86_64-unknown-linux-gnu.tar.gz
+cd sleep-on-time-v0.2.2-x86_64-unknown-linux-gnu
 ./install-linux.sh
 ```
 
-Builds the release binary, installs it to `/usr/local/bin`, installs the desktop file and icons, and refreshes the icon caches.
+**From source**:
+
+```bash
+./build-install.sh
+```
+
+Both install the binary to `/usr/local/bin`, the desktop file and icons, and refresh the icon caches.
 
 ## Usage
 
